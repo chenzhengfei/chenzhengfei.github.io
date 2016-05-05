@@ -63,7 +63,7 @@ public class A {
 
 虽然我们可以在编译的时候，加入`classpath`，但是，一般来说，在各类`IDE`中使用，还是需要特殊处理一下。
 
-### maven
+### Maven
 
 加上依赖就好。同时，由于`lombok`只在编译期才处理，所以并不需要在运行时有这个依赖，可以把`scope`定义为`provided`。
 
@@ -95,30 +95,39 @@ public class A {
 lombok 目前最新版本为 1.16.8，个人觉得比较常用的有以下几种，更多请查看官网。
 
 * `@val`
+
   如果你要定义一个`final`的变量，并且不想写类型，这个可以帮到你。但是，在实际项目中，完全没有使用到。
 
 * `@NonNull`
+
   这个在参数中使用，如果调用时传了`null`，就直接抛空指针。
 
 * `@Data`
+
   `@ToString`、`@EqualsAndHashCode`、`@Getter`、`@Setter`和`@RequiredArgsConstructor`注解的集合。
 
 * `@Getter`与`@Setter`
+
   作用于属性和类上，自动生成属性的`getXXX()`和`setXXX()`方法。若在类上，则对所有属性有效。并可通过`AccessLevel`参数控制方法的访问级别。
 
 * `@ToString`
+
   作用于类，自动重写类的`ToString()`方法。常用的参数有`exclude`（指定方法中不包含的属性）、`callSuper`（方法中是否包含父类`ToString()`方法返回的值）
 
 * `@EqualsAndHashCode`
+
   作用于类，自动重写类的`equals()`、`hashCode()`方法。常用的参数有`exclude`（指定方法中不包含的属性）、`callSuper`（方法中是否包含父类`ToString()`方法返回的值）
 
 * `@NoArgsConstructor`, `@RequiredArgsConstructor`和`@AllArgsConstructor`
+
   作用于类，`@NoArgsConstructor`自动生成不带参数的构造方法；`@RequiredArgsConstructor`自动生成带参数的构造方法，主要针对一些需要特殊处理的属性，比如未初始化的`final`属性；`@AllArgsConstructor`自动生成包含所有属性的构造方法。
 
 * `@Synchronized`
+
   作用于方法，可锁定指定的对象，如果不指定，则默认创建创建一个对象锁定。
 
 * `@Log`，或者直接`@Slf4j`
+
   作用于类，具体包含`@CommonsLog`、`@Log`、`@Log4j`、`@Log4j2`、`@Slf4j`和``@XSlf4j`，分别对用不同的日志系统。利用此类注解，可为类创建一个`log`属性。
 
 ## `sonar`源码审查
@@ -133,4 +142,4 @@ lombok 目前最新版本为 1.16.8，个人觉得比较常用的有以下几种，更多请查看官网。
 
 1. [lombok](https://projectlombok.org/), lombok 官网，但是，目前没有发现哪里可以捐赠
 2. [sonar](http://www.sonarqube.org/), sonar 官网，对代码规范有一些建议
-3. [sonar-java](https://github.com/liudongmiao/sonar-java/releases), sonar-java 的支持`lombok`版本，如果使用`4.X`的sonar，可以下载看看
+3. [sonar-java](https://github.com/liudongmiao/sonar-java/releases), sonar-java 低版本插件，支持`lombok`
