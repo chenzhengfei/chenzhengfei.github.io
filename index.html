@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>chenzhengfei.GitHub.io by chenzhengfei</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">chenzhengfei.GitHub.io</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/chenzhengfei/doc" class="btn">View on GitHub</a>
+      <a href="https://github.com/chenzhengfei/doc/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/chenzhengfei/doc/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="使用-lombok-简化-java-代码" class="anchor" href="#%E4%BD%BF%E7%94%A8-lombok-%E7%AE%80%E5%8C%96-java-%E4%BB%A3%E7%A0%81" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>使用 lombok 简化 Java 代码</h1>
+
+<h2>
+<a id="本文简单介绍-lombok-这种可以简化-java-代码的工具" class="anchor" href="#%E6%9C%AC%E6%96%87%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D-lombok-%E8%BF%99%E7%A7%8D%E5%8F%AF%E4%BB%A5%E7%AE%80%E5%8C%96-java-%E4%BB%A3%E7%A0%81%E7%9A%84%E5%B7%A5%E5%85%B7" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>本文简单介绍 lombok 这种可以简化 Java 代码的工具。</h2>
+
+<h2>
+<a id="一个典型的-java-类" class="anchor" href="#%E4%B8%80%E4%B8%AA%E5%85%B8%E5%9E%8B%E7%9A%84-java-%E7%B1%BB" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>一个典型的 Java 类</h2>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">A</span> {
+
+  <span class="pl-k">private</span> <span class="pl-k">int</span> a;
+
+  <span class="pl-k">private</span> <span class="pl-smi">String</span> b;
+
+  <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">getA</span>() {
+    <span class="pl-k">return</span> a;
+  }
+
+  <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">getB</span>() {
+    <span class="pl-k">return</span> b;
+  }
+
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">setA</span>(<span class="pl-k">int</span> <span class="pl-v">a</span>) {
+    <span class="pl-v">this</span><span class="pl-k">.</span>a <span class="pl-k">=</span> a;
+  }
+
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">setB</span>(<span class="pl-smi">String</span> <span class="pl-v">b</span>) {
+    <span class="pl-v">this</span><span class="pl-k">.</span>b <span class="pl-k">=</span> b;
+  }
+
+}</pre></div>
+
+<p>对于这样一个简单的 Java 类，我们通常需要给每个属性写<code>getter</code>和<code>setter</code>，而这种实际上没有什么太大的意义。当然，如果有的公司或团队使用代码行数评估工作量，还是多写几行吧；同时，可以考虑一下我们团队。</p>
+
+<h2>
+<a id="使用-lombok简化代码" class="anchor" href="#%E4%BD%BF%E7%94%A8-lombok%E7%AE%80%E5%8C%96%E4%BB%A3%E7%A0%81" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>使用 lombok，简化代码</h2>
+
+<p>为了简化<code>getter</code>与<code>setter</code>，lombok 提供了一种机制，帮助我们自动生成这些样板代码。以上的代码，如果使用<code>lombok</code>的话，将变得很简单：</p>
+
+<div class="highlight highlight-source-java"><pre>@<span class="pl-smi">lombok<span class="pl-k">.</span>Getter</span>
+@<span class="pl-smi">lombok<span class="pl-k">.</span>Setter</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">A</span> {
+
+    <span class="pl-k">private</span> <span class="pl-k">int</span> a;
+
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> b;
+
+}</pre></div>
+
+<p>顾名思义，<code>lombok.Getter</code>就是生成<code>getter</code>，<code>lombok.Setter</code>就是生成<code>setter</code>。但是，这样真的就可以了么？编译下，让我们看看生成的二进制代码。(请自行下载<code>lombok.jar</code>)</p>
+
+<pre><code>命令行&gt; javac -cp lombok.jar A.java
+命令行&gt; javap -c A.class
+</code></pre>
+
+<p>输出结果略。可以看到完全一样。</p>
+
+<p>更进一步，如果在编译的时候，加入<code>-g:none</code>选项，甚至可以看到生成的文件<strong>完全</strong>一样。</p>
+
+<h2>
+<a id="简单使用" class="anchor" href="#%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>简单使用</h2>
+
+<p>虽然我们可以在编译的时候，加入<code>classpath</code>，但是，一般来说，在各类<code>IDE</code>中使用，还是需要特殊处理一下。</p>
+
+<h3>
+<a id="maven" class="anchor" href="#maven" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Maven</h3>
+
+<p>加上依赖就好。同时，由于<code>lombok</code>只在编译期才处理，所以并不需要在运行时有这个依赖，可以把<code>scope</code>定义为<code>provided</code>。</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependencies</span>&gt;
+    &lt;<span class="pl-ent">dependency</span>&gt;
+        &lt;<span class="pl-ent">groupId</span>&gt;org.projectlombok&lt;/<span class="pl-ent">groupId</span>&gt;
+        &lt;<span class="pl-ent">artifactId</span>&gt;lombok&lt;/<span class="pl-ent">artifactId</span>&gt;
+        &lt;<span class="pl-ent">version</span>&gt;1.16.8&lt;/<span class="pl-ent">version</span>&gt;
+        &lt;<span class="pl-ent">scope</span>&gt;provided&lt;/<span class="pl-ent">scope</span>&gt;
+    &lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;/<span class="pl-ent">dependencies</span>&gt;</pre></div>
+
+<p>值得注意的是，<code>maven</code>的<code>maven-compiler-plugin</code>低版本和<code>lombok</code>高版本不兼容，目前已知<code>maven-compiler-plugin</code>的<code>2.3.X</code>与<code>lombok</code>的<code>1.6.X</code>不兼容。这个需要了解<code>lombok</code>的原理才能进一步说明。</p>
+
+<h3>
+<a id="eclipse" class="anchor" href="#eclipse" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Eclipse</h3>
+
+<p>由于<code>eclipse</code>的默认编译器并不是<code>javac</code>，所以，需要额外安装，基本就是改下引导参数，可以直接运行<code>jar</code>包，或者手动在<code>eclipse.ini</code>里加上参数<code>-Xbootclasspath/a:lombok.jar -javaagent:lombok.jar</code>。</p>
+
+<h3>
+<a id="idea-intellij" class="anchor" href="#idea-intellij" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>IDEA IntelliJ</h3>
+
+<p>虽然<code>IDEA IntelliJ</code>默认使用<code>javac</code>作为编译器，理论上可以不装插件。可是，跳转等特性也随之没了。所以，还是安装个插件吧，直接去仓库里搜索<code>lombok</code>就成。</p>
+
+<p>如果项目中使用高级配置，需要额外注意一下。虽然在编译的时候，<code>lombok</code>配置文件可以在任何能找到的目录，但是，<code>lombok-intellij</code>插件默认并不支持在任何目录，如果有配置文件，建议放在<code>java</code>的源代码根目录中。</p>
+
+<h2>
+<a id="更多-lombok-注解" class="anchor" href="#%E6%9B%B4%E5%A4%9A-lombok-%E6%B3%A8%E8%A7%A3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>更多 lombok 注解</h2>
+
+<p>lombok 目前最新版本为 1.16.8，个人觉得比较常用的有以下几种，更多请查看官网。</p>
+
+<ul>
+<li>
+<p><code>@val</code></p>
+
+<p>如果你要定义一个<code>final</code>的变量，并且不想写类型，这个可以帮到你。但是，在实际项目中，完全没有使用到。</p>
+</li>
+<li>
+<p><code>@NonNull</code></p>
+
+<p>这个在参数中使用，如果调用时传了<code>null</code>，就直接抛空指针。</p>
+</li>
+<li>
+<p><code>@Data</code></p>
+
+<p><code>@ToString</code>、<code>@EqualsAndHashCode</code>、<code>@Getter</code>、<code>@Setter</code>和<code>@RequiredArgsConstructor</code>注解的集合。</p>
+</li>
+<li>
+<p><code>@Getter</code>与<code>@Setter</code></p>
+
+<p>作用于属性和类上，自动生成属性的<code>getXXX()</code>和<code>setXXX()</code>方法。若在类上，则对所有属性有效。并可通过<code>AccessLevel</code>参数控制方法的访问级别。</p>
+</li>
+<li>
+<p><code>@ToString</code></p>
+
+<p>作用于类，自动重写类的<code>ToString()</code>方法。常用的参数有<code>exclude</code>（指定方法中不包含的属性）、<code>callSuper</code>（方法中是否包含父类<code>ToString()</code>方法返回的值）</p>
+</li>
+<li>
+<p><code>@EqualsAndHashCode</code></p>
+
+<p>作用于类，自动重写类的<code>equals()</code>、<code>hashCode()</code>方法。常用的参数有<code>exclude</code>（指定方法中不包含的属性）、<code>callSuper</code>（方法中是否包含父类<code>ToString()</code>方法返回的值）</p>
+</li>
+<li>
+<p><code>@NoArgsConstructor</code>, <code>@RequiredArgsConstructor</code>和<code>@AllArgsConstructor</code></p>
+
+<p>作用于类，<code>@NoArgsConstructor</code>自动生成不带参数的构造方法；<code>@RequiredArgsConstructor</code>自动生成带参数的构造方法，主要针对一些需要特殊处理的属性，比如未初始化的<code>final</code>属性；<code>@AllArgsConstructor</code>自动生成包含所有属性的构造方法。</p>
+</li>
+<li>
+<p><code>@Synchronized</code></p>
+
+<p>作用于方法，可锁定指定的对象，如果不指定，则默认创建创建一个对象锁定。</p>
+</li>
+<li>
+<p><code>@Log</code>，或者直接<code>@Slf4j</code></p>
+
+<p>作用于类，具体包含<code>@CommonsLog</code>、<code>@Log</code>、<code>@Log4j</code>、<code>@Log4j2</code>、<code>@Slf4j</code>和`<code>@XSlf4j</code>，分别对用不同的日志系统。利用此类注解，可为类创建一个<code>log</code>属性。</p>
+</li>
+</ul>
+
+<h2>
+<a id="sonar源码审查" class="anchor" href="#sonar%E6%BA%90%E7%A0%81%E5%AE%A1%E6%9F%A5" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>sonar</code>源码审查</h2>
+
+<p><code>sonar</code>是一个源码审查工具。最新版<code>5.X</code>已经支持<code>lombok</code>的全部注解，不再认为是没有使用的变量。但是，旧的<code>4.X</code>还是认为没有使用这些变量。可以后向移植这些包，或者应用单独的补丁。</p>
+
+<h2>
+<a id="原理" class="anchor" href="#%E5%8E%9F%E7%90%86" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>原理</h2>
+
+<p>呃，真的有人想看原理么？如果想，请留言，以后再发。</p>
+
+<h2>
+<a id="参考文献" class="anchor" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>参考文献</h2>
+
+<ol>
+<li>
+<a href="https://projectlombok.org/">lombok</a>, lombok 官网，但是，目前没有发现哪里可以捐赠</li>
+<li>
+<a href="http://www.sonarqube.org/">sonar</a>, sonar 官网，对代码规范有一些建议</li>
+<li>
+<a href="https://github.com/liudongmiao/sonar-java/releases">sonar-java</a>, sonar-java 低版本插件，支持<code>lombok</code>
+</li>
+</ol>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/chenzhengfei/doc">chenzhengfei.GitHub.io</a> is maintained by <a href="https://github.com/chenzhengfei">chenzhengfei</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
