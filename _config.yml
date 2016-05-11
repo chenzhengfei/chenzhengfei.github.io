@@ -1,9 +1,9 @@
 # Site settings
 title: Chen Zhengfei
 description: Chen Zhengfei
-favicon:
+favicon: /assets/img/avatar.JPG
 baseurl:
-url: https://liungkejin.github.io
+url: https://chenzhengfei.github.io
 rss_url:
 
 # Build settings
